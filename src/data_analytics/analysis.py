@@ -30,6 +30,15 @@ def summarize_sales(df: pd.DataFrame) -> dict[str, float | int | str]:
     }
 
 
+def build_dashboard_data(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
+    region_summary = df.groupby("region")["revenue"].sum().sort_values(ascending=False)
+    product_summary = df.groupby("product")["revenue"].sum().sort_values(ascending=False)
+    return {
+        "region_summary": region_summary.to_frame(name="revenue"),
+        "product_summary": product_summary.to_frame(name="revenue"),
+    }
+
+
 def create_visualizations(df: pd.DataFrame, output_dir: str | Path | None = None) -> None:
     output_path = Path(output_dir) if output_dir is not None else OUTPUT_DIR
     output_path.mkdir(parents=True, exist_ok=True)
